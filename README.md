@@ -59,10 +59,13 @@ python manage.py runserver
 
 3. Initiate Django
 ```
-docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py makemigrations
-docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py makemigrations djangorealidm
-docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py migrate
-docker exec -it django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py createsuperuser
+docker exec djangorealopenidmdemo python manage.py makemigrations
+docker exec djangorealopenidmdemo python manage.py migrate
+docker exec djangorealopenidmdemo python manage.py makemigrations djangorealidm
+docker exec djangorealopenidmdemo python manage.py migrate
+docker exec -it djangorealopenidmdemo python manage.py createsuperuser
+docker exec djangorealopenidmdemo python manage.py loaddata djangorealidm/fixtures/newfixtures.json
+
 ```
 4. docker-compose up -d
 

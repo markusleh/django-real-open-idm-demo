@@ -3,7 +3,7 @@ version: '3.4'
 services:
   djangorealopenidmdemo:
     image: djangorealopenidmdemo
-    container-name: djangorealopenidmdemo
+    container_name: djangorealopenidmdemo
     build:
       context: .
       dockerfile: ./Dockerfile
