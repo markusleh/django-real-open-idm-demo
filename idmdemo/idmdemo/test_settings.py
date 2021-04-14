@@ -18,3 +18,18 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
+
+REAL_IDM = {
+    'LDAP_SERVER': "127.0.01",
+    'LDAP_BIND_USER': "cn=Directory Manager",
+    'LDAP_BIND_PASSWD': "password",
+    'LDAP_SEARCH_BASE': "dc=idptestbed",
+    'LDAP_SYNC_MODE': "TWO_WAY",
+    'LDAP_USER_ATTRIBUTE': "uid",
+    'LDAP_USER_OBJECTCLASS': "person",
+    'LDAP_GROUP_ATTRIBUTE': "cn",
+    'LDAP_GROUP_OBJECTCLASS': "posixGroup",
+    'LDAP_UNIQUE_ATTRIBUTE': "nsuniqueid",
+    'LDAP_MEMBER_ATTRIBUTE': "memberUid",
+    'LDAP_MEMBER_OBJECT_ATTRIBUTE': "uid"
+}

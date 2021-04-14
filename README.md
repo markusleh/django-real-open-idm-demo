@@ -112,7 +112,7 @@ REAL_IDM = {
 |LDAP_USER_ATTRIBUTE| | Mapping for `User`.`username` and AD attribute name used to search the user from AD.  |`sAMAccountName`|
 |LDAP_USER_OBJECTCLASS| |person|`person`|
 |LDAP_GROUP_ATTRIBUTE| |mapping for Group.name and AD attribute name used to search the group from AD|`cn`|
-|LDAP_GROUP_OBJECTLCASS| |e.g. posixGroup|`group`|
+|LDAP_GROUP_OBJECTCLASS| |e.g. posixGroup|`group`|
 |LDAP_UNIQUE_ATTRIBUTE| | |`objectSID`|
 |LDAP_MEMBER_ATTRIBUTE| |how to find LDAP_UNIQUE_ATTRIBUTE e.g. 'member',|`member`|
 |LDAP_MEMBER_OBJECT_ATTRIBUTE| |format of the user object inside LDAP_MEMBER_ATTRIBUTE e.g. 'dn'|`dn`|

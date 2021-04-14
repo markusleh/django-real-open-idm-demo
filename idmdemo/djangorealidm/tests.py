@@ -8,8 +8,9 @@ from .views import superuser_or_approver
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 import datetime
-from .utils import check_grant_in_effect
+from .utils import check_grant_in_effect, LDAPSync
 import random
+
 
 def random_name():
     return random.randint(1,10000000)
@@ -147,3 +148,30 @@ class UtilsTests(IdmTests):
             not_valid_after=not_after
         )
         self.assertEquals(check_grant_in_effect(grant), True)
+
+
+class LdapTests(TestCase):
+    fixtures = ['newfixtures']
+
+    def setUp(self):
+        self.user1 = User.objects.get(pk=1)
+        self.user2 = User.objects.get(pk=2)
+        self.group1 = Group.objects.get(pk=1)
+        self.s = LDAPSync()
+        self.s.sync_user_unique_id(self.user1)
+        self.s.sync_user_unique_id(self.user2)
+
+    def test_sync_user1_already_in_group(self):
+        # Initial DB sync
+        members = self.s.get_members_in_group("cn=group1,ou=Groups,dc=idptestbed")
+        self.assertIn(User.objects.get(pk=1).unique_id, members)
+
+    def test_sync_user2_add_in_group(self):
+        members = self.s.get_members_in_group("cn=group1,ou=Groups,dc=idptestbed")
+        self.assertNotIn(self.user2.unique_id, members)
+        self.s.sync_users_groups([self.user2, self.user1], [self.group1])
+        members = self.s.get_members_in_group("cn=group1,ou=Groups,dc=idptestbed")
+        self.assertIn(self.user2.unique_id, members)
+
+
+

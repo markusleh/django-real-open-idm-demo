@@ -1,4 +1,12 @@
 language: python
+services:
+  - docker
+
+before_install:
+  - docker build -t ldap/test tests/ldap
+  - docker run -d -p 127.0.0.1:389:389 ldap/test
+  - docker ps -a
+
 cache: pip
 dist: focal
 python:
