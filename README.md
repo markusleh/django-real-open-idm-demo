@@ -3,6 +3,22 @@
 
 ![Preview](img/demo.png)
 
+##### Table of Contents  
+- [Demo](#demo)
+- [Getting started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Install](#install)
+  * [Docker Install](#docker-install)
+  * [Try out](#try-out)
+- [Settings](#settings)
+  * [Module: LDAP](#module--ldap)
+- [Utils](#utils)
+  * [AD: Sync approved Group membership to Active Directory](#ad--sync-approved-group-membership-to-active-directory)
+- [Other features](#other-features)
+  * [Reports](#reports)
+  * [Objects](#objects)
+    + [Roles](#roles)
+
 # Demo
 https://django-real-idm.herokuapp.com/admin
 
@@ -30,7 +46,6 @@ pip install -r requirements/dev.txt
 ```
 # run in folder with manage.py
 python manage.py makemigrations
-python manage.py makemigrations djangorealidm
 python manage.py migrate
 python manage.py createsuperuser
 ```
@@ -60,7 +75,6 @@ python manage.py runserver
 3. Initiate Django
 ```
 docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py makemigrations
-docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py makemigrations djangorealidm
 docker exec django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py migrate
 docker exec -it django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.py createsuperuser
 ```
@@ -72,6 +86,36 @@ docker exec -it django-real-open-idm-demo_djangorealopenidmdemo_1 python manage.
 1. Go to `http://localhost:8000/admin/auth/user/` and add your account (which you created using `createsuperuser` to django existing group `approver`
 
 2. Navigate to `http://localhost:8000/admin/djangorealidm/grant/` and try to create a new grant.
+
+# Settings
+
+See also [full example settings](blob/main/idmdemo/idmdemo/dev_settings.py)
+
+All settings are formatted as follows:
+```python
+REAL_IDM = { 
+    'SOME_SETTING': 'value', 
+    'ANOTHER_SETTING': 'another_value'
+    #...
+}
+```
+
+### Module: LDAP
+
+| Setting | Required | Description | Default |
+|---------|----------|---------|---------|
+|LDAP_SERVER|required|server address e.g. `192.168.1.1`|
+|LDAP_SEARCH_BASE|required|location for the groups and users are e.g. `dc=win,dc=local`|
+|LDAP_SYNC_MODE|required||LDAP sync mode. Either `ONE_WAY` or `TWO_WAY`| 
+|LDAP_BIND_USER| |bind user e.g. bind@win.local|
+|LDAP_BIND_PASSWD| |Password for bind user|
+|LDAP_USER_ATTRIBUTE| | Mapping for `User`.`username` and AD attribute name used to search the user from AD.  |`sAMAccountName`|
+|LDAP_USER_OBJECTCLASS| |person|`person`|
+|LDAP_GROUP_ATTRIBUTE| |mapping for Group.name and AD attribute name used to search the group from AD|`cn`|
+|LDAP_GROUP_OBJECTCLASS| |e.g. posixGroup|`group`|
+|LDAP_UNIQUE_ATTRIBUTE| | |`objectSID`|
+|LDAP_MEMBER_ATTRIBUTE| |how to find LDAP_UNIQUE_ATTRIBUTE e.g. 'member',|`member`|
+|LDAP_MEMBER_OBJECT_ATTRIBUTE| |format of the user object inside LDAP_MEMBER_ATTRIBUTE e.g. 'dn'|`dn`|
 
 # Utils
 
@@ -108,11 +152,9 @@ Add LDAP configuration parameters in `settings.py`
 REAL_IDM = {
     'LDAP_SERVER': "",          # required, server address e.g. '192.168.1.1'
     'SEARCH_BASE': "",          # required, where the groups and users are located e.g. 'dc=win,dc=local'
-    'BIND_USER': "",            # optional, bind user e.g. bind@win.local
-    'BIND_PASSWD': "",          # optional
-    'LDAP_USER_ATTRIBUTE': ""   # optional, mapping for User.username and AD attribute name used to search the user from AD. Defaults to 'sAMAccountName'
 }
 ```
+(See more configuration parameters [here](#ad--sync-approved-group-membership-to-active-directory)))
 Create a new `On-approved hook` to sync group membership status after new approvals have been made and attach it to your workflow.
 ![Preview](img/function-example.png)
 
